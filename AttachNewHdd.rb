@@ -1,12 +1,7 @@
 ##  -*-  coding: utf-8; mode: ruby -*-  ##
 ##  vi: set ft=ruby
 
-p 'Dir.getwd = ', Dir.getwd
-p '__dir__ = ', __dir__
-p File.expand_path("MachineInfo.rb")
-p File.expand_path("MachineInfo.rb", __dir__)
-
-load  File.expand_path("common/MachineInfo.rb")  if File.exists?("common/MachineInfo.rb")
+load  File.expand_path('MachineInfo.rb', __dir__)
 
 machine_id = MachineInfo.get_machine_id()
 
