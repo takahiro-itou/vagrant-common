@@ -1,8 +1,10 @@
 ##  -*-  coding: utf-8; mode: ruby -*-  ##
 ##  vi: set ft=ruby
 
-p Dir.getwd
-p __dir__
+p 'Dir.getwd = ', Dir.getwd
+p '__dir__', __dir__
+p File.expand_path("MachineInfo.rb")
+p File.expand_path("MachineInfo.rb", __dir__)
 
 load  File.expand_path("common/MachineInfo.rb")  if File.exists?("common/MachineInfo.rb")
 
