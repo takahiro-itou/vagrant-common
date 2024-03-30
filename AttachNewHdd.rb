@@ -2,9 +2,10 @@
 ##  vi: set ft=ruby
 
 p 'Dir.getwd = ', Dir.getwd
-p '__dir__', __dir__
+p '__dir__ = ', __dir__
 p File.expand_path("MachineInfo.rb")
 p File.expand_path("MachineInfo.rb", __dir__)
+p "__dir__/provision.newhdd.sh"
 
 load  File.expand_path("common/MachineInfo.rb")  if File.exists?("common/MachineInfo.rb")
 
