@@ -2,10 +2,12 @@
 
 script_dir=$(dirname "$0")
 
-project_base_dir=$(readlink -f "${script_dir}/..")
-vagrant_dir="${project_base_dir}/vagrant"
+project_base_default=$(readlink -f "${script_dir}/../..")
 
+project_base_dir=${PROJECT_BASE_DIR:-"${project_base_default}"}
 workdir=${WORKDIR:-'/tmp'}
+
+vagrant_dir="${project_base_dir}/vagrant"
 
 userfile_src_dir='data'
 userfile_archive_file="${vagrant_dir}/data.tar.xz"
