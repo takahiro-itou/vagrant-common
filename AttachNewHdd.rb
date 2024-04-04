@@ -4,6 +4,7 @@
 load  File.expand_path('MachineInfo.rb', __dir__)
 
 machine_id = MachineInfo.get_machine_id()
+disk_file = $disk_image_file
 
 Vagrant.configure("2") do |config|
 
@@ -11,7 +12,6 @@ Vagrant.configure("2") do |config|
     #
     # ディスクを追加する
     #
-    disk_file = './disk/ubuntu-develop-sdc.vdi'
     unless File.exists?(disk_file)
       v.customize [
         'createmedium',     'disk',
