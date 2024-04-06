@@ -7,9 +7,13 @@ machine_id = MachineInfo.get_machine_id()
 disk_file = $disk_image_file
 
 def check_disk_attached(machine, port: 'SCSI-2-0')
+  if machine == '' then
+    return  'none'
+  end
+
   vm_info = `vboxmanage showvminfo #{machine} --machinereadable | grep #{port}`
   if vm_info == '' then
-    return  vm_info
+    return  'none'
   end
 
   value = (vm_info.split("=")[1].gsub('"','').chomp())
@@ -70,7 +74,7 @@ Vagrant.configure("2") do |config|
 
     if hdd_attached != 'none' then
       raise Vagrant::Errors::VagrantError.new, \
-            "drive attached #{hdd_attached} - cannot be destroyed"
+            "drive attached '#{hdd_attached}' - cannot be destroyed"
     end
   end
 
