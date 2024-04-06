@@ -8,6 +8,10 @@ disk_file = $disk_image_file
 
 def check_disk_attached(machine, port: 'SCSI-2-0')
   vm_info = `vboxmanage showvminfo #{machine} --machinereadable | grep #{port}`
+  if vm_info == '' then
+    return  vm_info
+  end
+
   value = (vm_info.split("=")[1].gsub('"','').chomp())
   p "check_disk_attached = #{value}"
 
