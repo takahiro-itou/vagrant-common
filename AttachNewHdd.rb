@@ -19,6 +19,15 @@ def check_disk_attached(machine, port: 'SCSI-2-0')
   return  value
 end
 
+def detach_disk(machine, port: 2, device: 0)
+  command = ("VBoxManage storageattach '#{machine}'"
+             + " --storagectl 'SCSI' --port #{port} --device #{device}"
+             + " --type hdd --medium none")
+  p command
+  `#{command}`
+end
+
+
 Vagrant.configure("2") do |config|
 
   config.vm.provider "virtualbox" do |v|
@@ -55,9 +64,7 @@ Vagrant.configure("2") do |config|
   # 仮想マシンを停止した時に、デタッチしておく
   #
   config.trigger.after :halt do |trigger|
-    trigger.run = {inline: "VBoxManage storageattach '#{machine_id}'" +
-      " --storagectl 'SCSI' --port 2 --device 0 --type hdd --medium none"
-    }
+    detach_disk(machine_id)
   end
 
   config.trigger.before :destroy do
