@@ -23,11 +23,12 @@ def check_disk_attached(machine, port: 'SCSI-2-0')
 end
 
 def detach_disk(machine, port: 2, device: 0)
-  command = "VBoxManage storageattach '#{machine}'" +
-            " --storagectl 'SCSI' --port #{port} --device #{device}" +
-            " --type hdd --medium none"
+  if machine == ''
+    return
+  end
+  command = "#{__dir__}/detach-disk #{machine} #{port} #{device}"
   p command
-  `#{command}`
+  `/bin/bash -xue #{command}`
 end
 
 
@@ -66,16 +67,24 @@ Vagrant.configure("2") do |config|
   # 仮想マシンを停止した時に、デタッチしておく
   #
   config.trigger.after :halt do |trigger|
-    detach_disk(machine_id)
+    trigger.ruby do |env, machine|
+      puts "detach disk from #{machine.id} ..."
+      detach_disk(machine/id)
+    end
+    trigger.info = 'Detach disk after halt'
   end
 
-  config.trigger.before :destroy do
-    hdd_attached = check_disk_attached(machine_id, port: 'SCSI-2-0')
+  config.trigger.before :destroy do |trigger|
+    tigger.ruby do |env, machine|
+      puts "check disk attach in machine #{machine.id} ..."
+      hdd_attached = check_disk_attached(machine.id, port: 'SCSI-2-0')
 
-    if hdd_attached != 'none' then
-      raise Vagrant::Errors::VagrantError.new, \
-            "drive attached '#{hdd_attached}' - cannot be destroyed"
+      if hdd_attached != 'none' then
+        raise Vagrant::Errors::VagrantError.new, \
+              "drive attached '#{hdd_attached}' - cannot be destroyed"
+      end
     end
+    trigger.info = 'Prevent destroy if HDD attached'
   end
 
 end
