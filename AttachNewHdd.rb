@@ -60,7 +60,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.trigger.before :destroy do
-    hdd_attached = check_disk_attached(#{machine_id}, 'SCSI-2-0')
+    hdd_attached = check_disk_attached(machine_id, 'SCSI-2-0')
   end
 
 end
