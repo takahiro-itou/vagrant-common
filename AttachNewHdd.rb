@@ -6,6 +6,18 @@ load  File.expand_path('MachineInfo.rb', __dir__)
 machine_id = MachineInfo.get_machine_id()
 disk_file = $disk_image_file
 
+def check_disk_attached(machine:, port: 'SCSI-2-0')
+  vm_info = `vboxmanage showvminfo #{machine} --machinereadable | grep #{port}`
+  value = (vm_info.split("=")[1].gsub('"','').chomp())
+  p "check_disk_attached = #{value}"
+
+  if value != 'none' then
+    raise Vagrant::Errors::VagrantError.new, "drive attached - cannot be destroyed"
+  end
+
+  return  value
+end
+
 Vagrant.configure("2") do |config|
 
   config.vm.provider "virtualbox" do |v|
@@ -45,6 +57,10 @@ Vagrant.configure("2") do |config|
     trigger.run = {inline: "VBoxManage storageattach '#{machine_id}'" +
       " --storagectl 'SCSI' --port 2 --device 0 --type hdd --medium none"
     }
+  end
+
+  config.trigger.before :destroy do
+    hdd_attached = check_disk_attached(#{machine_id}, 'SCSI-2-0`)
   end
 
 end
