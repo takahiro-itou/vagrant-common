@@ -6,13 +6,14 @@ load  File.expand_path('MachineInfo.rb', __dir__)
 machine_id = MachineInfo.get_machine_id()
 disk_file = $disk_image_file
 
-def check_disk_attached(machine:, port: 'SCSI-2-0')
+def check_disk_attached(machine, port: 'SCSI-2-0')
   vm_info = `vboxmanage showvminfo #{machine} --machinereadable | grep #{port}`
   value = (vm_info.split("=")[1].gsub('"','').chomp())
   p "check_disk_attached = #{value}"
 
   if value != 'none' then
-    raise Vagrant::Errors::VagrantError.new, "drive attached - cannot be destroyed"
+    raise Vagrant::Errors::VagrantError.new, \
+          "drive attached #{value} - cannot be destroyed"
   end
 
   return  value
@@ -60,7 +61,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.trigger.before :destroy do
-    hdd_attached = check_disk_attached(machine_id, 'SCSI-2-0')
+    hdd_attached = check_disk_attached(machine_id, port: 'SCSI-2-0')
   end
 
 end
