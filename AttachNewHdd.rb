@@ -11,11 +11,6 @@ def check_disk_attached(machine, port: 'SCSI-2-0')
   value = (vm_info.split("=")[1].gsub('"','').chomp())
   p "check_disk_attached = #{value}"
 
-  if value != 'none' then
-    raise Vagrant::Errors::VagrantError.new, \
-          "drive attached #{value} - cannot be destroyed"
-  end
-
   return  value
 end
 
@@ -69,6 +64,11 @@ Vagrant.configure("2") do |config|
 
   config.trigger.before :destroy do
     hdd_attached = check_disk_attached(machine_id, port: 'SCSI-2-0')
+
+    if hdd_attached != 'none' then
+      raise Vagrant::Errors::VagrantError.new, \
+            "drive attached #{hdd_attached} - cannot be destroyed"
+    end
   end
 
 end
