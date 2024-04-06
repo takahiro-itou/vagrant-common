@@ -30,6 +30,7 @@ Vagrant.configure("2") do |config|
         '--device',         0,
         '--type',           'hdd',
         '--medium',         disk_file,
+        '--hotpluggable',   'on',
       ]
     end
   end
