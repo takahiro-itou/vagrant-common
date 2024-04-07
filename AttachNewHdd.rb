@@ -5,6 +5,7 @@ load  File.expand_path('MachineInfo.rb', __dir__)
 
 machine_id = MachineInfo.get_machine_id()
 disk_file = $disk_image_file
+puts "HDD : disk_file = #{disk_file}"
 
 def check_disk_attached(machine, port: 'SCSI-2-0')
   if machine == '' then
