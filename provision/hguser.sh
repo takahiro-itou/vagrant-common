@@ -1,7 +1,7 @@
 #! /bin/bash  -xue
 
 echo  Provisioning  ${USER} for ${HOSTNAME}
-test  -f  ${HOME}/.provision.hguser  &&  exit 0
+test  -f  "${HOME}/.provision/hguser"  &&  exit 0
 
 ###
 ##  仮想マシン内に作成するユーザーのパスワード
@@ -48,4 +48,5 @@ sudo  chmod  0600  ${newUserAuth}
 sudo  chmod  0700  ${newUserSSH}
 sudo  chown  -R  ${newUser}:${newUserGroup}  ${newUserSSH}
 
-date  >  ${HOME}/.provision.hguser
+mkdir -p "${HOME}/.provision"
+date  >  "${HOME}/.provision/hguser"

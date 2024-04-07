@@ -6,6 +6,6 @@ Vagrant.configure("2") do |config|
                       source: "data.tar.xz",
                       destination: "/tmp/")
   config.vm.provision("userfiles2", type: "shell",
-                      path: "common/provision.data.sh",
+                      path: "common/provision/data.sh",
                       privileged: false)
 end

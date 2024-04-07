@@ -1,5 +1,7 @@
 #!/bin/bash  -xue
 
+test  -f "/root/.provision/newhdd"  &&  exit 0
+
 # New HDD (/dev/sdc)
 cat <<  __EOF__  |  tee  /dev/shm/zero.md5
 53e979547d8c2ea86560ac45de08ae25 *-
@@ -35,3 +37,6 @@ sudo  chmod  1777  /ext-hdd/data
 
 ls -al /ext-hdd/
 sleep 5
+
+mkdir -p "/root/.provision"
+date  >  "/root/.provision/newhdd"

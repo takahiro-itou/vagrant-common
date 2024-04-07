@@ -1,7 +1,7 @@
 #!/bin/bash  -xue
 
 echo  "Provisioning  ${USER} for ${HOSTNAME}"
-test  -f  "${HOME}/.provision.user"  &&  exit 0
+test  -f  "${HOME}/.provision/user"  &&  exit 0
 
 for src_dir in  /tmp/data/home/vagrant  ; do
     if  test -d ${src_dir} ; then
@@ -15,4 +15,5 @@ if  test -d ${HOME}/.ssh ; then
     chmod  700  ${HOME}/.ssh
 fi
 
-date  >  "${HOME}/.provision.user"
+mkdir -p "${HOME}/.provision"
+date  >  "${HOME}/.provision/user"
