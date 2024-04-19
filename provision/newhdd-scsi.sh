@@ -3,19 +3,23 @@
 test  -f "/root/.provision/newhdd-scsi"  &&  exit 0
 
 # New HDD (/dev/sdc)
-cat <<  __EOF__  |  tee  /dev/shm/zero.md5
+workdir=$(mktemp -d "/dev/shm/disk.XXXXXXXXXX")
+mkdir -p "${work_dir}"
+
+cat <<  __EOF__  |  tee  "${workdir}/zero.md5"
 53e979547d8c2ea86560ac45de08ae25 *-
 __EOF__
 
-cat <<  __EOF__  |  tee  /dev/shm/check_mbr.md5
+cat <<  __EOF__  |  tee  "${workdir}/check_mbr.md5"
 0a4dbaf15747a2f282529ebec196a2d4 *-
 __EOF__
 
 trg_hdd='/dev/sdc'
 
 # MBR/GPT ヘッダ 3 セクタ 768 バイトが全部ゼロなら未初期化と判定
-sudo  dd if=${trg_hdd} bs=512 count=3 | md5sum -b
-if sudo dd if=${trg_hdd} bs=512 count=3 | md5sum -c /dev/shm/zero.md5 ; then
+sudo  dd if=${trg_hdd} of="${workdir}/gpt.chk" bs=512 count=3
+md5sum -b "${workdir}/gpt.chk"
+if cat "${workdir}/gpt.chk" | md5sum -c "${workdir}/zero.md5" ; then
     sudo  parted --script --align optimal ${trg_hdd} -- mklabel gpt
     sudo  parted --script --align optimal ${trg_hdd} -- mkpart primary ext3 1 -1
     sudo  mkfs.ext3     "${trg_hdd}1"
@@ -25,8 +29,9 @@ else
 fi
 
 # GPT ヘッダは毎回変わるようなので、MBR ヘッダだけ確認する
-sudo  dd if=${trg_hdd} bs=512 count=1 | md5sum -b
-if sudo  dd if=${trg_hdd} bs=512 count=1 | md5sum -c /dev/shm/check_mbr.md5 ; then
+sudo  dd if=${trg_hdd} of="${workdir}/mbr.chk" bs=512 count=1
+md5sum -b "${workdir}/mbr.chk"
+if cat "${workdir}/mbr.chk" | md5sum -c "${workdir}/check_mbr.md5" ; then
     echo "MBR Header OK."   1>&2
     sleep 5
 else
