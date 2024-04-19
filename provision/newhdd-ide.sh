@@ -35,6 +35,7 @@ if cat "${workdir}/mbr.chk" | md5sum -c "${workdir}/check_mbr.md5" ; then
     echo "MBR Header OK."   1>&2
     sleep 5
 else
+    od -t x1 "${workdir}/mbr.chk"
     echo "WARNING : Check MBR Header FAILED."   1>&2
     sleep 5
 fi
