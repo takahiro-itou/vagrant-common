@@ -61,7 +61,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provision("newhdd", type: "shell",
-                      path: "#{__dir__}/provision/newhdd.sh",
+                      path: "#{__dir__}/provision/newhdd-scsi.sh",
                       privileged: true)
   #
   # 仮想マシンを停止した時に、デタッチしておく
