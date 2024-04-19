@@ -11,6 +11,8 @@ cat <<  __EOF__  |  tee  /dev/shm/check_mbr.md5
 0a4dbaf15747a2f282529ebec196a2d4 *-
 __EOF__
 
+
+
 # MBR/GPT ヘッダ 3 セクタ 768 バイトが全部ゼロなら未初期化と判定
 sudo  dd if=/dev/sdc bs=512 count=3 | md5sum -b
 if sudo dd if=/dev/sdc bs=512 count=3 | md5sum -c /dev/shm/zero.md5 ; then
@@ -24,7 +26,13 @@ fi
 
 # GPT ヘッダは毎回変わるようなので、MBR ヘッダだけ確認する
 sudo  dd if=/dev/sdc bs=512 count=1 | md5sum -b
-sudo  dd if=/dev/sdc bs=512 count=1 | md5sum -c /dev/shm/check_mbr.md5
+if sudo  dd if=/dev/sdc bs=512 count=1 | md5sum -c /dev/shm/check_mbr.md5 ; then
+    echo "MBR Header OK."   1>&2
+    sleep 5
+else
+    echo "WARNING : Check MBR Header FAILED."   1>&2
+    sleep 5
+fi
 
 sudo  mkdir  -p    /ext-hdd/data
 sudo  chmod  1777  /ext-hdd/data

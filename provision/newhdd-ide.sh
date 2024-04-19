@@ -8,7 +8,7 @@ cat <<  __EOF__  |  tee  /dev/shm/zero.md5
 __EOF__
 
 cat <<  __EOF__  |  tee  /dev/shm/check_mbr.md5
-0a4dbaf15747a2f282529ebec196a2d4 *-
+38cce5f2b629115fbe619ac7d01cf189 *-
 __EOF__
 
 trg_hdd='/dev/sdb'
@@ -26,7 +26,13 @@ fi
 
 # GPT ヘッダは毎回変わるようなので、MBR ヘッダだけ確認する
 sudo  dd if=${trg_hdd} bs=512 count=1 | md5sum -b
-sudo  dd if=${trg_hdd} bs=512 count=1 | md5sum -c /dev/shm/check_mbr.md5
+if sudo  dd if=${trg_hdd} bs=512 count=1 | md5sum -c /dev/shm/check_mbr.md5 ; then
+    echo "MBR Header OK."   1>&2
+    sleep 5
+else
+    echo "WARNING : Check MBR Header FAILED."   1>&2
+    sleep 5
+fi
 
 sudo  mkdir  -p    /ext-hdd/data
 sudo  chmod  1777  /ext-hdd/data
