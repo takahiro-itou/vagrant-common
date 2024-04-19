@@ -4,7 +4,7 @@ test  -f "/root/.provision/newhdd-scsi"  &&  exit 0
 
 # New HDD (/dev/sdc)
 workdir=$(mktemp -d "/dev/shm/disk.XXXXXXXXXX")
-mkdir -p "${work_dir}"
+mkdir -p "${workdir}"
 
 cat <<  __EOF__  |  tee  "${workdir}/zero.md5"
 53e979547d8c2ea86560ac45de08ae25 *-
