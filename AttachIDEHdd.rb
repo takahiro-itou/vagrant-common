@@ -25,7 +25,7 @@ end
 
 def detach_disk(machine, port: 1, device: 0)
   command = "VBoxManage storageattach #{machine}" +
-            " --storagectl 'IDE Controller'" +
+            " --storagectl IDE" +
             " --port #{port} --device #{device}" +
             " --type hdd --medium none"
   p command
@@ -52,7 +52,7 @@ Vagrant.configure("2") do |config|
     else
       v.customize [
         'storageattach',    :id,
-        '--storagectl',     'IDE Controller',
+        '--storagectl',     'IDE',
         '--port',           1,
         '--device',         0,
         '--type',           'hdd',
