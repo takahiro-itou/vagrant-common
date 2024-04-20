@@ -27,13 +27,19 @@ conf_trg_dir="${tempdir}/${userfile_src_dir}"
 # プロジェクト内の所定のディレクトリの内容を、
 # 作成した作業用ディレクトリにコピーする。
 
-
 rsync -a "${conf_src_dir}/" "${conf_trg_dir}/"
 
 # プロジェクトの外にある所定のディレクトリも、
 # 作業用ディレクトリにコピーする。
 
-rsync -a ~/VagrantConfig/ "${conf_trg_dir}/home/vagrant/"
+copy_config_dir=${COPY_CONFIG_DIR:-'no'}
+if [[ "X${copy_config_dir}Y" = 'XyesY' ]] ; then
+    rsync -a ~/VagrantConfig/ "${conf_trg_dir}/home/vagrant/"
+fi
+
+for dir in "$@" ; do
+    rsync -a "${dir}" "${conf_trg_dir}/home/vagrant/"
+done
 
 # 転送するディレクトリをアーカイブしておく
 
