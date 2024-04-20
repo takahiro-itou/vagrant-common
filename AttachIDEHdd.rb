@@ -7,7 +7,7 @@ machine_id = MachineInfo.get_machine_id()
 disk_file = $disk_image_file
 puts "HDD : disk_file = #{disk_file}"
 
-def check_disk_attached(machine, port: 'SCSI-2-0')
+def check_disk_attached(machine, port: 'IDE-1-0')
   if machine == '' then
     return  'none'
   end
@@ -78,7 +78,7 @@ Vagrant.configure("2") do |config|
   config.trigger.before :destroy do |trigger|
     trigger.ruby do |env, machine|
       puts "Check disk attach in machine #{machine.id} ..."
-      hdd_attached = check_disk_attached(machine_id, port: 'SCSI-2-0')
+      hdd_attached = check_disk_attached(machine_id, port: 'IDE-1-0')
 
       if hdd_attached != 'none' then
         raise Vagrant::Errors::VagrantError.new, \
