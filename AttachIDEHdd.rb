@@ -23,9 +23,10 @@ def check_disk_attached(machine, port: 'SCSI-2-0')
   return  value
 end
 
-def detach_disk(machine, port: 2, device: 0)
+def detach_disk(machine, port: 1, device: 0)
   command = "VBoxManage storageattach #{machine}" +
-            " --storagectl SCSI --port #{port} --device #{device}" +
+            " --storagectl IDE" +
+            " --port #{port} --device #{device}" +
             " --type hdd --medium none"
   p command
   `#{command}`
@@ -51,8 +52,8 @@ Vagrant.configure("2") do |config|
     else
       v.customize [
         'storageattach',    :id,
-        '--storagectl',     'SCSI',
-        '--port',           2,
+        '--storagectl',     'IDE',
+        '--port',           1,
         '--device',         0,
         '--type',           'hdd',
         '--medium',         disk_file,
@@ -61,7 +62,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provision("newhdd", type: "shell",
-                      path: "#{__dir__}/provision/newhdd.sh",
+                      path: "#{__dir__}/provision/newhdd-ide.sh",
                       privileged: true)
   #
   # 仮想マシンを停止した時に、デタッチしておく
