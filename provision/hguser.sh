@@ -40,13 +40,17 @@ newUserAuth=${newUserSSH}/authorized_keys
 
 sudo  mkdir  ${newUserSSH}
 
-if test -f ${pubKeyFile} ; then
+if [[ -f ${pubKeyFile} ]] ; then
     cat  ${pubKeyFile} | sudo tee -a  ${newUserAuth}
 fi
 
-sudo  chmod  0600  ${newUserAuth}
-sudo  chmod  0700  ${newUserSSH}
-sudo  chown  -R  ${newUser}:${newUserGroup}  ${newUserSSH}
+if [[ -f "${newUserAuth}" ]] ; then
+    sudo  chmod  0600  ${newUserAuth}
+fi
+if [[ -d "${newUserSSH}" ]] ; then
+    sudo  chmod  0700  ${newUserSSH}
+    sudo  chown  -R  ${newUser}:${newUserGroup}  ${newUserSSH}
+fi
 
 mkdir -p "${HOME}/.provision"
 date  >  "${HOME}/.provision/hguser"
