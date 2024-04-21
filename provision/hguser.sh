@@ -7,9 +7,9 @@ test  -f  "${HOME}/.provision/hguser"  &&  exit 0
 ##  仮想マシン内に作成するユーザーのパスワード
 ###
 
-userPass='\$6\$F1IrDR2U\$'
-userPass+='gdsuepzT7noxUWaA5cpRjfAdhE5cS6qh0WhNBYm83ey'
-userPass+='PiZ0XbfrzuG6dGH3aezIQWn.vRf.aJsz1qD3RMi7yj0'
+user_pass='\$6\$F1IrDR2U\$'
+user_pass+='gdsuepzT7noxUWaA5cpRjfAdhE5cS6qh0WhNBYm83ey'
+user_pass+='PiZ0XbfrzuG6dGH3aezIQWn.vRf.aJsz1qD3RMi7yj0'
 
 newUser=hg
 newUserGroup=hg
@@ -25,7 +25,7 @@ sudo  useradd  ${newUserAddOpts}  -m  ${newUser}
 eval  newUserHome=~${newUser}
 
 # ユーザーのパスワードを設定する。
-newPasswd=${userPass}
+newPasswd=${user_pass}
 sedPat="^${newUser}:!:.*\$"
 sedRep="${newUser}:${newPasswd}:18294:0:99999:7:::"
 sedCmd="s|${sedPat}|${sedRep}|"
