@@ -20,8 +20,8 @@ userIndex=0
 echo  "Initialize User: ${HOSTNAME}  ${newUser}"
 
 # ユーザーを追加する。
-newUserAddOpts="-g ${new_user_group}  -d /home/${newUser}  -s /bin/bash"
-sudo  useradd  ${newUserAddOpts}  -m  ${newUser}
+new_user_add_opts="-g ${new_user_group}  -d /home/${newUser}  -s /bin/bash"
+sudo  useradd  "${new_user_add_opts}"  -m "${newUser}"
 eval  new_user_home="~${newUser}"
 
 # ユーザーのパスワードを設定する。
