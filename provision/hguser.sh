@@ -21,7 +21,7 @@ echo  "Initialize User: ${HOSTNAME}  ${new_user}"
 
 # ユーザーを追加する。
 new_user_add_opts="-g ${new_user_group}  -d /home/${new_user}  -s /bin/bash"
-sudo  useradd  "${new_user_add_opts}"  -m "${new_user}"
+sudo  useradd  ${new_user_add_opts}  -m "${new_user}"
 eval  new_user_home="~${new_user}"
 
 # ユーザーのパスワードを設定する。
