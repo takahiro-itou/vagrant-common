@@ -34,21 +34,21 @@ echo  "Execute: ${command}"
 eval  ${command}
 
 # 公開鍵を設定
-pubKeyFile=${HOME}/.ssh/Vagrant-Hg.8192.rsa.pub
+pub_key_file="${HOME}/.ssh/Vagrant-Hg.8192.rsa.pub"
 new_user_ssh=${newUserHome}/.ssh
 new_user_auth="${new_user_ssh}/authorized_keys"
 
 sudo  mkdir -p "${new_user_ssh}"
 
-if [[ -f ${pubKeyFile} ]] ; then
-    cat  ${pubKeyFile} | sudo  tee -a "${new_user_auth}"
+if [[ -f "${pub_key_file}" ]] ; then
+    cat  "${pub_key_file}" | sudo  tee -a "${new_user_auth}"
 fi
 
 if [[ -f "${new_user_auth}" ]] ; then
     sudo  chmod  0600  "${new_user_auth}"
 fi
 if [[ -d "${new_user_ssh}" ]] ; then
-    sudo  chmod  0700  ${new_user_ssh}
+    sudo  chmod  0700  "${new_user_ssh}"
     sudo  chown  -R  ${newUser}:${newUserGroup}  ${new_user_ssh}
 fi
 
