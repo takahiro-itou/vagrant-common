@@ -12,15 +12,15 @@ user_pass+='gdsuepzT7noxUWaA5cpRjfAdhE5cS6qh0WhNBYm83ey'
 user_pass+='PiZ0XbfrzuG6dGH3aezIQWn.vRf.aJsz1qD3RMi7yj0'
 
 newUser=hg
-newUserGroup=hg
+new_user_group=hg
 
-sudo  groupadd  ${newUserGroup}
+sudo  groupadd  "${new_user_group}"
 userIndex=0
 
 echo  "Initialize User: ${HOSTNAME}  ${newUser}"
 
 # ユーザーを追加する。
-newUserAddOpts="-g ${newUserGroup}  -d /home/${newUser}  -s /bin/bash"
+newUserAddOpts="-g ${new_user_group}  -d /home/${newUser}  -s /bin/bash"
 sudo  useradd  ${newUserAddOpts}  -m  ${newUser}
 eval  newUserHome=~${newUser}
 
@@ -49,7 +49,7 @@ if [[ -f "${new_user_auth}" ]] ; then
 fi
 if [[ -d "${new_user_ssh}" ]] ; then
     sudo  chmod  0700  "${new_user_ssh}"
-    sudo  chown  -R  ${newUser}:${newUserGroup}  ${new_user_ssh}
+    sudo  chown  -R  "${newUser}:${new_user_group}"  "${new_user_ssh}"
 fi
 
 mkdir -p "${HOME}/.provision"
