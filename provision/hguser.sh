@@ -25,9 +25,9 @@ sudo  useradd  ${newUserAddOpts}  -m  ${newUser}
 eval  newUserHome=~${newUser}
 
 # ユーザーのパスワードを設定する。
-newPasswd=${user_pass}
+new_passwd="${user_pass}"
 sedPat="^${newUser}:!:.*\$"
-sedRep="${newUser}:${newPasswd}:18294:0:99999:7:::"
+sedRep="${newUser}:${new_passwd}:18294:0:99999:7:::"
 sedCmd="s|${sedPat}|${sedRep}|"
 command="sudo  sed -i.bak  -e '${sedCmd}'  /etc/shadow"
 echo  "Execute: ${command}"
