@@ -22,7 +22,7 @@ echo  "Initialize User: ${HOSTNAME}  ${newUser}"
 # ユーザーを追加する。
 newUserAddOpts="-g ${new_user_group}  -d /home/${newUser}  -s /bin/bash"
 sudo  useradd  ${newUserAddOpts}  -m  ${newUser}
-eval  newUserHome=~${newUser}
+eval  new_user_home="~${newUser}"
 
 # ユーザーのパスワードを設定する。
 new_passwd="${user_pass}"
@@ -35,7 +35,7 @@ eval  ${command}
 
 # 公開鍵を設定
 pub_key_file="${HOME}/.ssh/Vagrant-Hg.8192.rsa.pub"
-new_user_ssh=${newUserHome}/.ssh
+new_user_ssh="${new_user_home}/.ssh"
 new_user_auth="${new_user_ssh}/authorized_keys"
 
 sudo  mkdir -p "${new_user_ssh}"
