@@ -7,46 +7,50 @@ test  -f  "${HOME}/.provision/hguser"  &&  exit 0
 ##  仮想マシン内に作成するユーザーのパスワード
 ###
 
-userPass='\$6\$F1IrDR2U\$'
-userPass+='gdsuepzT7noxUWaA5cpRjfAdhE5cS6qh0WhNBYm83ey'
-userPass+='PiZ0XbfrzuG6dGH3aezIQWn.vRf.aJsz1qD3RMi7yj0'
+user_pass='\$6\$F1IrDR2U\$'
+user_pass+='gdsuepzT7noxUWaA5cpRjfAdhE5cS6qh0WhNBYm83ey'
+user_pass+='PiZ0XbfrzuG6dGH3aezIQWn.vRf.aJsz1qD3RMi7yj0'
 
-newUser=hg
-newUserGroup=hg
+new_user='hg'
+new_user_group='hg'
 
-sudo  groupadd  ${newUserGroup}
+sudo  groupadd  "${new_user_group}"
 userIndex=0
 
-echo  "Initialize User: ${HOSTNAME}  ${newUser}"
+echo  "Initialize User: ${HOSTNAME}  ${new_user}"
 
 # ユーザーを追加する。
-newUserAddOpts="-g ${newUserGroup}  -d /home/${newUser}  -s /bin/bash"
-sudo  useradd  ${newUserAddOpts}  -m  ${newUser}
-eval  newUserHome=~${newUser}
+new_user_add_opts="-g ${new_user_group}  -d /home/${new_user}  -s /bin/bash"
+sudo  useradd  ${new_user_add_opts}  -m "${new_user}"
+eval  new_user_home="~${new_user}"
 
 # ユーザーのパスワードを設定する。
-newPasswd=${userPass}
-sedPat="^${newUser}:!:.*\$"
-sedRep="${newUser}:${newPasswd}:18294:0:99999:7:::"
-sedCmd="s|${sedPat}|${sedRep}|"
-command="sudo  sed -i.bak  -e '${sedCmd}'  /etc/shadow"
+new_passwd="${user_pass}"
+sed_pat="^${new_user}:!:.*\$"
+sed_rep="${new_user}:${new_passwd}:18294:0:99999:7:::"
+sed_cmd="s|${sed_pat}|${sed_rep}|"
+command="sudo  sed -i.bak  -e '${sed_cmd}'  /etc/shadow"
 echo  "Execute: ${command}"
 eval  ${command}
 
 # 公開鍵を設定
-pubKeyFile=${HOME}/.ssh/Vagrant-Hg.8192.rsa.pub
-newUserSSH=${newUserHome}/.ssh
-newUserAuth=${newUserSSH}/authorized_keys
+pub_key_file="${HOME}/.ssh/Vagrant-Hg.8192.rsa.pub"
+new_user_ssh="${new_user_home}/.ssh"
+new_user_auth="${new_user_ssh}/authorized_keys"
 
-sudo  mkdir  ${newUserSSH}
+sudo  mkdir -p "${new_user_ssh}"
 
-if test -f ${pubKeyFile} ; then
-    cat  ${pubKeyFile} | sudo tee -a  ${newUserAuth}
+if [[ -f "${pub_key_file}" ]] ; then
+    cat  "${pub_key_file}" | sudo  tee -a "${new_user_auth}"
 fi
 
-sudo  chmod  0600  ${newUserAuth}
-sudo  chmod  0700  ${newUserSSH}
-sudo  chown  -R  ${newUser}:${newUserGroup}  ${newUserSSH}
+if [[ -f "${new_user_auth}" ]] ; then
+    sudo  chmod  0600  "${new_user_auth}"
+fi
+if [[ -d "${new_user_ssh}" ]] ; then
+    sudo  chmod  0700  "${new_user_ssh}"
+    sudo  chown  -R  "${new_user}:${new_user_group}"  "${new_user_ssh}"
+fi
 
 mkdir -p "${HOME}/.provision"
 date  >  "${HOME}/.provision/hguser"
