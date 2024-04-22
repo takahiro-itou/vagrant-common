@@ -11,7 +11,7 @@ cat <<  __EOF__  |  tee  "${workdir}/zero.md5"
 __EOF__
 
 cat <<  __EOF__  |  tee  "${workdir}/check_mbr.md5"
-94e80e057734dbc291bdd784ea2fe010 *-
+8b4674b5321231a834f6e8cf0b4d67f9 *-
 __EOF__
 
 trg_hdd='/dev/sdb'
