@@ -32,12 +32,13 @@ def detach_disk(machine, port: 2, device: 0)
 end
 
 
-Vagrant.configure("2") do |config|
+##################################################################
+##
+##    ディスクを追加する
+##
 
-  config.vm.provider "virtualbox" do |v|
-    #
-    # ディスクを追加する
-    #
+def attach_scsi_hdd(v)
+
     unless File.exists?(disk_file)
       v.customize [
         'createmedium',     'disk',
@@ -58,14 +59,25 @@ Vagrant.configure("2") do |config|
         '--medium',         disk_file,
       ]
     end
-  end
 
-  config.vm.provision("newhdd", type: "shell",
-                      path: "#{__dir__}/provision/newhdd-scsi.sh",
-                      privileged: true)
-  #
-  # 仮想マシンを停止した時に、デタッチしておく
-  #
+end
+
+def provision_newhdd_scsi(vm)
+
+  vm.provision("newhdd", type: "shell",
+                path: "#{__dir__}/provision/newhdd-scsi.sh",
+                privileged: true)
+
+end
+
+
+##################################################################
+##
+##    仮想マシンを停止した時に、デタッチしておく
+##
+
+def config_detach_trigger(config)
+
   config.trigger.after :halt do |trigger|
     trigger.ruby do |env, machine|
       puts "Detach disk from #{machine.id} after halt ..."
@@ -86,5 +98,24 @@ Vagrant.configure("2") do |config|
     end
     trigger.info = 'Prevent destroy if HDD attached'
   end
+
+end
+
+
+Vagrant.configure("2") do |config|
+
+  #
+  # ディスクを追加する
+  #
+  config.vm.provider "virtualbox" do |v|
+    attach_scsi_hdd(v)
+  end
+
+  provision_newhdd_scsi(config.vm)
+
+  #
+  # 仮想マシンを停止した時に、デタッチしておく
+  #
+  config_detach_trigger(config)
 
 end
