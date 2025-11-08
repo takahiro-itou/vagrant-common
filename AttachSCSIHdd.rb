@@ -37,7 +37,7 @@ end
 ##    ディスクを追加する
 ##
 
-def attach_scsi_hdd(v)
+def attach_scsi_hdd(v, disk_file)
 
     unless File.exists?(disk_file)
       v.customize [
@@ -108,7 +108,7 @@ Vagrant.configure("2") do |config|
   # ディスクを追加する
   #
   config.vm.provider "virtualbox" do |v|
-    attach_scsi_hdd(v)
+    attach_scsi_hdd(v, disk_file)
   end
 
   provision_newhdd_scsi(config.vm)
