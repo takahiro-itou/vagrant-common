@@ -1,8 +1,12 @@
 ##  -*-  coding: utf-8; mode: ruby -*-  ##
 ##  vi: set ft=ruby
 
-Vagrant.configure("2") do |config|
+def customize_config(config)
   config.vm.box_download_options = {"ssl-revoke-best-effort" => true}
+end
+
+Vagrant.configure("2") do |config|
+  customize_config(config)
 
   config.vm.provider "virtualbox" do |v|
     v.customize [
