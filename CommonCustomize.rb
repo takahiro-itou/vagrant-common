@@ -5,10 +5,7 @@ def customize_config(config)
   config.vm.box_download_options = {"ssl-revoke-best-effort" => true}
 end
 
-Vagrant.configure("2") do |config|
-  customize_config(config)
-
-  config.vm.provider "virtualbox" do |v|
+def customize_vm_provider(v)
     v.customize [
       "modifyvm",           :id,
       "--cableconnected1",  "on",
@@ -28,6 +25,13 @@ Vagrant.configure("2") do |config|
       'VBoxInternal/Devices/VMMDev/0/Config/GetHostTimeDisabled',
       0
     ]
+def
+
+Vagrant.configure("2") do |config|
+  customize_config(config)
+
+  config.vm.provider "virtualbox" do |v|
+    customize_vm_provider(v)
   end
 
   config.vm.boot_timeout = 900
