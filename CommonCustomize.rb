@@ -29,7 +29,7 @@ def customize_vm_provider(vm)
     0
   ]
 
-def
+end
 
 ##
 ##  Usage
