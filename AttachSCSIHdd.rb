@@ -103,20 +103,16 @@ def config_detach_trigger(config)
 end
 
 
-Vagrant.configure("2") do |config|
-
-  #
-  # ディスクを追加する
-  #
-  config.vm.provider "virtualbox" do |v|
-    attach_scsi_hdd(v, disk_file)
-  end
-
-  provision_newhdd_scsi(config.vm)
-
-  #
-  # 仮想マシンを停止した時に、デタッチしておく
-  #
-  config_detach_trigger(config)
-
-end
+##
+##  Usage
+##
+##  ```
+##  Vagrant.configure("2") do |config|
+##
+##    config.vm.provider "virtualbox" do |v|
+##      attach_scsi_hdd(v, disk_file)
+##    end
+##    provision_newhdd_scsi(config.vm)
+##    config_detach_trigger(config)
+##  end
+##
