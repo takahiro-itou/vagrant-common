@@ -3,8 +3,6 @@
 
 load  File.expand_path('MachineInfo.rb', __dir__)
 
-disk_file = $disk_image_file
-puts "HDD : disk_file = #{disk_file}"
 
 def check_disk_attached(machine, port: 'SCSI-2-0')
   if machine == '' then
@@ -37,6 +35,9 @@ end
 ##
 
 def attach_scsi_hdd(v, disk_file)
+
+  puts "Start attach_scsi_hdd ..."
+  puts "HDD : disk_file = #{disk_file}"
 
     unless File.exists?(disk_file)
       v.customize [
