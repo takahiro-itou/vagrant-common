@@ -3,6 +3,7 @@
 
 def customize_config(config)
   config.vm.box_download_options = {"ssl-revoke-best-effort" => true}
+  config.vm.boot_timeout = 900
 end
 
 
@@ -36,6 +37,4 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |v|
     customize_vm_provider(v)
   end
-
-  config.vm.boot_timeout = 900
 end
