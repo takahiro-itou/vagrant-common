@@ -3,7 +3,6 @@
 
 load  File.expand_path('MachineInfo.rb', __dir__)
 
-machine_id = MachineInfo.get_machine_id()
 disk_file = $disk_image_file
 puts "HDD : disk_file = #{disk_file}"
 
@@ -77,6 +76,8 @@ end
 ##
 
 def config_detach_trigger(config)
+
+  machine_id = MachineInfo.get_machine_id()
 
   config.trigger.after :halt do |trigger|
     trigger.ruby do |env, machine|
