@@ -6,7 +6,3 @@ def provision_setup_ubuntu(vm)
                 path: "#{__dir__}/provision/setup-time.sh",
                 privileged: true)
 end
-
-Vagrant.configure("2") do |config|
-  provision_setup_ubuntu(config.vm)
-end
