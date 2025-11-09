@@ -11,7 +11,3 @@ def provision_upload_files(vm)
                 privileged: false)
 
 end
-
-Vagrant.configure("2") do |config|
-  provision_upload_files(config.vm)
-end
