@@ -9,7 +9,3 @@ def provision_setup_users(vm)
                 path: "#{__dir__}/provision/hguser.sh",
                 privileged: false)
 end
-
-Vagrant.configure("2") do |config|
-  provision_setup_users(config.vm)
-end
