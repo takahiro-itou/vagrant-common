@@ -106,7 +106,10 @@ def config_detach_trigger(config)
 end
 
 
-
+##
+##  Usage
+##
+##  ```
 Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |v|
     attach_ide_hdd(v, disk_file)
@@ -114,3 +117,5 @@ Vagrant.configure("2") do |config|
   provision_newhdd_ide(config.vm)
   config_detach_trigger(config)
 end
+##  ```
+##

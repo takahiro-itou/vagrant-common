@@ -116,4 +116,5 @@ end
 ##    provision_newhdd_scsi(config.vm)
 ##    config_detach_trigger(config)
 ##  end
+##  ```
 ##
