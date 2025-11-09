@@ -3,7 +3,6 @@
 
 load  File.expand_path('MachineInfo.rb', __dir__)
 
-disk_file = $disk_image_file
 
 def check_disk_attached(machine, port: 'IDE-1-0')
   if machine == '' then
@@ -110,12 +109,12 @@ end
 ##  Usage
 ##
 ##  ```
-Vagrant.configure("2") do |config|
-  config.vm.provider "virtualbox" do |v|
-    attach_ide_hdd(v, disk_file)
-  end
-  provision_newhdd_ide(config.vm)
-  config_detach_trigger(config)
-end
+##  Vagrant.configure("2") do |config|
+##    config.vm.provider "virtualbox" do |v|
+##      attach_ide_hdd(v, disk_file)
+##    end
+##    provision_newhdd_ide(config.vm)
+##    config_detach_trigger(config)
+##  end
 ##  ```
 ##

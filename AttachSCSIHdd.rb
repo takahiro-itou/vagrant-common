@@ -22,7 +22,8 @@ end
 
 def detach_disk(machine, port: 2, device: 0)
   command = "VBoxManage storageattach #{machine}" +
-            " --storagectl SCSI --port #{port} --device #{device}" +
+            " --storagectl SCSI" +
+            " --port #{port} --device #{device}" +
             " --type hdd --medium none"
   p command
   `#{command}`
@@ -109,7 +110,6 @@ end
 ##
 ##  ```
 ##  Vagrant.configure("2") do |config|
-##
 ##    config.vm.provider "virtualbox" do |v|
 ##      attach_scsi_hdd(v, disk_file)
 ##    end
