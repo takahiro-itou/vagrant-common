@@ -6,7 +6,3 @@ def provision_ram_disk(vm)
                 path: "#{__dir__}/provision/ramdisk.sh",
                 privileged: true)
 end
-
-Vagrant.configure("2") do |config|
-  provision_ram_disk(config.vm)
-end
