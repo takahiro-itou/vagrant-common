@@ -3,9 +3,6 @@
 
 load  File.expand_path('MachineInfo.rb', __dir__)
 
-machine_id = MachineInfo.get_machine_id()
-disk_file = $disk_image_file
-puts "HDD : disk_file = #{disk_file}"
 
 def check_disk_attached(machine, port: 'IDE-1-0')
   if machine == '' then
@@ -33,12 +30,16 @@ def detach_disk(machine, port: 1, device: 0)
 end
 
 
-Vagrant.configure("2") do |config|
+##################################################################
+##
+##    ディスクを追加する
+##
 
-  config.vm.provider "virtualbox" do |v|
-    #
-    # ディスクを追加する
-    #
+def attach_ide_hdd(v, disk_file)
+
+  puts "Start attach_ide_hdd ..."
+  puts "HDD : disk_file = #{disk_file}"
+
     unless File.exists?(disk_file)
       v.customize [
         'createmedium',     'disk',
@@ -59,14 +60,27 @@ Vagrant.configure("2") do |config|
         '--medium',         disk_file,
       ]
     end
-  end
 
-  config.vm.provision("newhdd", type: "shell",
-                      path: "#{__dir__}/provision/newhdd-ide.sh",
-                      privileged: true)
-  #
-  # 仮想マシンを停止した時に、デタッチしておく
-  #
+end
+
+def provision_newhdd_ide(vm)
+
+  vm.provision("newhdd", type: "shell",
+                path: "#{__dir__}/provision/newhdd-ide.sh",
+                privileged: true)
+
+end
+
+
+##################################################################
+##
+##    仮想マシンを停止した時に、デタッチしておく
+##
+
+def config_detach_trigger(config)
+
+  machine_id = MachineInfo.get_machine_id()
+
   config.trigger.after :halt do |trigger|
     trigger.ruby do |env, machine|
       puts "Detach disk from #{machine.id} after halt ..."
@@ -89,3 +103,18 @@ Vagrant.configure("2") do |config|
   end
 
 end
+
+
+##
+##  Usage
+##
+##  ```
+##  Vagrant.configure("2") do |config|
+##    config.vm.provider "virtualbox" do |v|
+##      attach_ide_hdd(v, disk_file)
+##    end
+##    provision_newhdd_ide(config.vm)
+##    config_detach_trigger(config)
+##  end
+##  ```
+##

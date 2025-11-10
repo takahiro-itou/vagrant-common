@@ -29,12 +29,18 @@ def customize_vm_provider(vm)
     0
   ]
 
-def
-
-Vagrant.configure("2") do |config|
-  customize_config(config)
-
-  config.vm.provider "virtualbox" do |v|
-    customize_vm_provider(v)
-  end
 end
+
+##
+##  Usage
+##
+##  ```
+##  Vagrant.configure("2") do |config|
+##    customize_config(config)
+##
+##    config.vm.provider "virtualbox" do |v|
+##      customize_vm_provider(v)
+##    end
+##  end
+##  ```
+##
