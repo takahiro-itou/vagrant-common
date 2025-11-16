@@ -29,6 +29,14 @@ conf_trg_dir="${tempdir}/${userfile_src_dir}"
 
 rsync -a "${conf_src_dir}/" "${conf_trg_dir}/"
 
+# 所定の場所にプロジェクト固有のシェルスクリプトが
+# 存在する場合は、そのスクリプトも実行する。
+
+target_script="${vagrant_dir}/archive-data.sh"
+if [[ -x "${target_script}" ]] ; then
+    "${target_script}"  "${conf_trg_dir}"  "${project_base_dir}"
+fi
+
 # プロジェクトの外にある所定のディレクトリも、
 # 作業用ディレクトリにコピーする。
 
