@@ -38,15 +38,13 @@ end
 
 def add_scsi_storage_controller(vb)
 
-  machine_id = MachineInfo.get_machine_id()
-
   vb.customize [
-    'storagectl',   "#{machine_id}",
-    '--name',        'SCSI',
-    '--add',         'scsi',
-    '--controller',  'LSILogic',
-    '--portcount',   '16',
-    '--bootable',    'ont'
+    'storagectl',   :id,
+    '--name',       'SCSI',
+    '--add',        'scsi',
+    '--controller', 'LSILogic',
+    '--portcount',  '16',
+    '--bootable',   'ont'
   ]
 
 end
