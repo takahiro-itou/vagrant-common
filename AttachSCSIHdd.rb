@@ -21,16 +21,6 @@ def check_disk_attached(machine, port: 'SCSI-2-0')
 end
 
 
-def detach_disk(machine, port: 2, device: 0)
-  command = "VBoxManage storageattach #{machine}" +
-            " --storagectl SCSI" +
-            " --port #{port} --device #{device}" +
-            " --type hdd --medium none"
-  p command
-  `#{command}`
-end
-
-
 ##################################################################
 ##
 ##    ストレージコントローラを追加する
@@ -82,6 +72,27 @@ def attach_scsi_hdd(v, disk_file)
     end
 
 end
+
+
+##################################################################
+##
+##    ディスクをデタッチする
+##
+
+def detach_disk(vb, machine, port: 2, device: 0)
+
+  vb.customize [
+    'storageattach',   :id,
+    '--storagectl',     'SCSI',
+    '--port',           port,
+    '--device',         device,
+    '--type',           'hdd',
+    '--medium',         'none',
+  ]
+
+end
+
+
 
 def provision_newhdd_scsi(vm)
 
