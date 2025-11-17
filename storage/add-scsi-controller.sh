@@ -3,8 +3,8 @@
 set  -ue
 
 machine=$1
-name=${2:-'SCSI'}
-maxport=${3:-'16'}
+maxport=${2:-'16'}
+name=${3:-'SCSI'}
 
 
 function  add_scsi_ctl::enumerate_storage_controllers () {
