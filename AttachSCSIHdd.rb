@@ -45,7 +45,7 @@ end
 ##    ディスクを追加する
 ##
 
-def attach_scsi_hdd(v, disk_file)
+def attach_scsi_hdd(v, disk_file, port: 2, device: 0)
 
   puts "Start attach_scsi_hdd ..."
   puts "HDD : disk_file = #{disk_file}"
@@ -64,8 +64,8 @@ def attach_scsi_hdd(v, disk_file)
       v.customize [
         'storageattach',    :id,
         '--storagectl',     'SCSI',
-        '--port',           2,
-        '--device',         0,
+        '--port',           port,
+        '--device',         device,
         '--type',           'hdd',
         '--medium',         disk_file,
       ]
@@ -111,14 +111,14 @@ end
 ##    仮想マシンを停止した時に、デタッチしておく
 ##
 
-def config_detach_trigger(config)
+def config_detach_trigger(config, port: 2, device: 0)
 
   machine_id = MachineInfo.get_machine_id()
 
   config.trigger.after :halt do |trigger|
     trigger.ruby do |env, machine|
       puts "Detach disk from #{machine.id} after halt ..."
-      detach_disk(machine.id)
+      detach_disk(machine.id, port: port, device: device)
     end
     trigger.info = 'Detach disk after halt'
   end
