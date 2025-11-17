@@ -79,22 +79,22 @@ end
 ##    ディスクをデタッチする
 ##
 
-def detach_disk(config, port: 2, device: 0)
+def detach_disk(machine, port: 2, device: 0)
 
-  config.vm.provider "virtualbox" do |vb|
-    vb.customize [
-      'storageattach',    :id,
-      '--storagectl',     'SCSI',
-      '--port',           port,
-      '--device',         device,
-      '--type',           'hdd',
-      '--medium',         'none',
-    ]
-  end
+  command = "VBoxManage storageattach #{machine}" +
+            " --storagectl SCSI" +
+            " --port #{port} --device #{device}" +
+            " --type hdd --medium none"
+  p command
+  `#{command}`
 
 end
 
 
+##################################################################
+##
+##    新しいディスクに対するプロビジョニング
+##
 
 def provision_newhdd_scsi(vm, dev: '/dev/sdc')
 
@@ -118,7 +118,7 @@ def config_detach_trigger(config)
   config.trigger.after :halt do |trigger|
     trigger.ruby do |env, machine|
       puts "Detach disk from #{machine.id} after halt ..."
-      detach_disk(config)
+      detach_disk(machine.id)
     end
     trigger.info = 'Detach disk after halt'
   end
