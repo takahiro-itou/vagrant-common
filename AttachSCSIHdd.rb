@@ -20,11 +20,25 @@ def check_disk_attached(machine, port: 'SCSI-2-0')
   return  value
 end
 
+
 def detach_disk(machine, port: 2, device: 0)
   command = "VBoxManage storageattach #{machine}" +
             " --storagectl SCSI" +
             " --port #{port} --device #{device}" +
             " --type hdd --medium none"
+  p command
+  `#{command}`
+end
+
+
+##################################################################
+##
+##    ストレージコントローラを追加する
+##
+
+def add_scsi_storage_controller(v)
+  command = "storage/add-scsi-controller.sh" +
+            " #{machine}  16 SCSI"
   p command
   `#{command}`
 end
