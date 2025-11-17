@@ -29,12 +29,12 @@ end
 def add_scsi_storage_controller(vb)
 
   vb.customize [
-    'storagectl',   :id,
-    '--name',       'SCSI',
-    '--add',        'scsi',
-    '--controller', 'LSILogic',
-    '--portcount',  '16',
-    '--bootable',   'ont'
+    'storagectl',       :id,
+    '--name',           'SCSI',
+    '--add',            'scsi',
+    '--controller',     'LSILogic',
+    '--portcount',      '16',
+    '--bootable',       'on'
   ]
 
 end
@@ -79,16 +79,18 @@ end
 ##    ディスクをデタッチする
 ##
 
-def detach_disk(vb, machine, port: 2, device: 0)
+def detach_disk(config, port: 2, device: 0)
 
-  vb.customize [
-    'storageattach',   :id,
-    '--storagectl',     'SCSI',
-    '--port',           port,
-    '--device',         device,
-    '--type',           'hdd',
-    '--medium',         'none',
-  ]
+  config.vm.provider "virtualbox" do |vb|
+    vb.customize [
+      'storageattach',    :id,
+      '--storagectl',     'SCSI',
+      '--port',           port,
+      '--device',         device,
+      '--type',           'hdd',
+      '--medium',         'none',
+    ]
+  end
 
 end
 
@@ -115,7 +117,7 @@ def config_detach_trigger(config)
   config.trigger.after :halt do |trigger|
     trigger.ruby do |env, machine|
       puts "Detach disk from #{machine.id} after halt ..."
-      detach_disk(machine.id)
+      detach_disk(config)
     end
     trigger.info = 'Detach disk after halt'
   end
