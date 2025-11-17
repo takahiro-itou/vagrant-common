@@ -40,7 +40,7 @@ def add_scsi_storage_controller(config)
 
   machine_id = MachineInfo.get_machine_id()
 
-  command = "storage/add-scsi-controller.sh" +
+  command = "#{__dir__}/storage/add-scsi-controller.sh" +
             " #{machine_id}  16 SCSI"
   p command
   `#{command}`
