@@ -28,7 +28,6 @@ end
 
 def add_scsi_storage_controller(vb)
 
-  puts "[START] Add SCSI storage controller ..."
   vb.customize [
     'storagectl',       :id,
     '--name',           'SCSI',
@@ -37,7 +36,6 @@ def add_scsi_storage_controller(vb)
     '--portcount',      '16',
     '--bootable',       'on'
   ]
-  puts "[OK]: Added SCSI storage controller."
 
 end
 
@@ -98,10 +96,11 @@ end
 
 
 
-def provision_newhdd_scsi(vm)
+def provision_newhdd_scsi(vm, dev: '/dev/sdc')
 
   vm.provision("newhdd", type: "shell",
                 path: "#{__dir__}/provision/newhdd-scsi.sh",
+                args: [ dev ],
                 privileged: true)
 
 end
