@@ -28,6 +28,7 @@ end
 
 def add_scsi_storage_controller(vb)
 
+  puts "[START] Add SCSI storage controller ..."
   vb.customize [
     'storagectl',       :id,
     '--name',           'SCSI',
@@ -36,6 +37,7 @@ def add_scsi_storage_controller(vb)
     '--portcount',      '16',
     '--bootable',       'on'
   ]
+  puts "[OK]: Added SCSI storage controller."
 
 end
 
