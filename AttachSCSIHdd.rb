@@ -36,11 +36,15 @@ end
 ##    ストレージコントローラを追加する
 ##
 
-def add_scsi_storage_controller(v)
+def add_scsi_storage_controller(config)
+
+  machine_id = MachineInfo.get_machine_id()
+
   command = "storage/add-scsi-controller.sh" +
-            " #{machine}  16 SCSI"
+            " #{machine_id}  16 SCSI"
   p command
   `#{command}`
+
 end
 
 
