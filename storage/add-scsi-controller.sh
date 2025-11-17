@@ -17,7 +17,7 @@ VBoxManage  \
 
 function  add_scsi_ctl::main () {
 
-if [[ add_scsi_ctl::enumerate_storage_controllers | grep "${name}" ]] ; then
+if add_scsi_ctl::enumerate_storage_controllers | grep "${name}" ; then
     # 既にコントローラが存在するので無視
     echo  "Controller ${name} already exists. SKIP."  1>&2
     exit  0
