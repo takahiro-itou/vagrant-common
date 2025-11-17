@@ -36,14 +36,18 @@ end
 ##    ストレージコントローラを追加する
 ##
 
-def add_scsi_storage_controller(config)
+def add_scsi_storage_controller(vb)
 
   machine_id = MachineInfo.get_machine_id()
 
-  command = "#{__dir__}/storage/add-scsi-controller.sh" +
-            " #{machine_id}  16 SCSI"
-  p command
-  `#{command}`
+  vb.customize [
+    'storagectl',   "#{machine_id}",
+    '--name',        'SCSI',
+    '--add',         'scsi',
+    '--controller',  'LSILogic',
+    '--portcount',   '16',
+    '--bootable',    'ont'
+  ]
 
 end
 
