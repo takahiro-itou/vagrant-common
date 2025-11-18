@@ -64,8 +64,8 @@ def attach_ide_hdd(v, disk_file, port: 1, device: 0)
       v.customize [
         'storageattach',    :id,
         '--storagectl',     'IDE',
-        '--port',           1,
-        '--device',         0,
+        '--port',           port,
+        '--device',         device,
         '--type',           'hdd',
         '--medium',         disk_file,
       ]
