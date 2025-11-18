@@ -118,15 +118,16 @@ def config_detach_trigger(config, port: 1, device: 0)
   config.trigger.after :halt do |trigger|
     trigger.ruby do |env, machine|
       puts "Detach disk from #{machine.id} after halt ..."
-      detach_disk(machine.id)
+      detach_disk(machine.id, port: port, device: device)
     end
     trigger.info = 'Detach disk after halt'
   end
 
   config.trigger.before :destroy do |trigger|
     trigger.ruby do |env, machine|
-      puts "Check disk attach in machine #{machine.id} ..."
-      hdd_attached = check_disk_attached(machine_id, port: 'IDE-1-0')
+      port_key="IDE-#{port}-#{device}"
+      puts "Check disk attach in machine #{machine.id} in #{port_key}"
+      hdd_attached = check_disk_attached(machine_id, port: port_key)
 
       if hdd_attached != 'none' then
         raise Vagrant::Errors::VagrantError.new, \

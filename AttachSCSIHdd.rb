@@ -125,8 +125,9 @@ def config_detach_trigger(config, port: 2, device: 0)
 
   config.trigger.before :destroy do |trigger|
     trigger.ruby do |env, machine|
-      puts "Check disk attach in machine #{machine.id} ..."
-      hdd_attached = check_disk_attached(machine_id, port: 'SCSI-2-0')
+      port_key="SCSI-#{port}-#{device}"
+      puts "Check disk attach in machine #{machine.id} in #{port_key}"
+      hdd_attached = check_disk_attached(machine_id, port: port_key)
 
       if hdd_attached != 'none' then
         raise Vagrant::Errors::VagrantError.new, \
