@@ -2,6 +2,9 @@
 
 test  -f "/root/.provision/newhdd-ide"  &&  exit 0
 
+trg_hdd='/dev/sdb'
+echo  "provision newhdd ide for dev: ${trg_hdd}"
+
 # New HDD (/dev/sdc)
 workdir=$(mktemp -d "/dev/shm/disk.XXXXXXXXXX")
 mkdir -p "${workdir}"
@@ -14,7 +17,6 @@ cat <<  __EOF__  |  tee  "${workdir}/check_mbr.md5"
 8b4674b5321231a834f6e8cf0b4d67f9 *-
 __EOF__
 
-trg_hdd='/dev/sdb'
 
 # MBR/GPT ヘッダ 3 セクタ 768 バイトが全部ゼロなら未初期化と判定
 sudo  dd if=${trg_hdd} of="${workdir}/gpt.chk" bs=512 count=3
