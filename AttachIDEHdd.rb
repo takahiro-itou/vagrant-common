@@ -20,14 +20,6 @@ def check_disk_attached(machine, port: 'IDE-1-0')
   return  value
 end
 
-def detach_disk(machine, port: 1, device: 0)
-  command = "VBoxManage storageattach #{machine}" +
-            " --storagectl IDE" +
-            " --port #{port} --device #{device}" +
-            " --type hdd --medium none"
-  p command
-  `#{command}`
-end
 
 
 ##################################################################
@@ -62,6 +54,27 @@ def attach_ide_hdd(v, disk_file)
     end
 
 end
+
+
+##################################################################
+##
+##    ディスクをデタッチする
+##
+
+def detach_disk(machine, port: 1, device: 0)
+  command = "VBoxManage storageattach #{machine}" +
+            " --storagectl IDE" +
+            " --port #{port} --device #{device}" +
+            " --type hdd --medium none"
+  p command
+  `#{command}`
+end
+
+
+##################################################################
+##
+##    新しいディスクに対するプロビジョニング
+##
 
 def provision_newhdd_ide(vm)
 
