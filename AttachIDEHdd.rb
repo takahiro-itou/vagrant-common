@@ -96,10 +96,11 @@ end
 ##    新しいディスクに対するプロビジョニング
 ##
 
-def provision_newhdd_ide(vm)
+def provision_newhdd_ide(vm, dev: '/dev/sdb')
 
   vm.provision("newhdd", type: "shell",
                 path: "#{__dir__}/provision/newhdd-ide.sh",
+                args: [ dev ],
                 privileged: true)
 
 end
