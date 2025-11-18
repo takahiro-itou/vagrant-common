@@ -45,7 +45,7 @@ end
 ##    ディスクを追加する
 ##
 
-def attach_ide_hdd(v, disk_file)
+def attach_ide_hdd(v, disk_file, port: 1, device: 0)
 
   puts "Start attach_ide_hdd ..."
   puts "HDD : disk_file = #{disk_file}"
@@ -111,7 +111,7 @@ end
 ##    仮想マシンを停止した時に、デタッチしておく
 ##
 
-def config_detach_trigger(config)
+def config_detach_trigger(config, port: 1, device: 0)
 
   machine_id = MachineInfo.get_machine_id()
 
