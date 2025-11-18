@@ -20,13 +20,23 @@ def check_disk_attached(machine, port: 'SCSI-2-0')
   return  value
 end
 
-def detach_disk(machine, port: 2, device: 0)
-  command = "VBoxManage storageattach #{machine}" +
-            " --storagectl SCSI" +
-            " --port #{port} --device #{device}" +
-            " --type hdd --medium none"
-  p command
-  `#{command}`
+
+##################################################################
+##
+##    ストレージコントローラを追加する
+##
+
+def add_scsi_storage_controller(vb)
+
+  vb.customize [
+    'storagectl',       :id,
+    '--name',           'SCSI',
+    '--add',            'scsi',
+    '--controller',     'LSILogic',
+    '--portcount',      '16',
+    '--bootable',       'on'
+  ]
+
 end
 
 
@@ -35,7 +45,7 @@ end
 ##    ディスクを追加する
 ##
 
-def attach_scsi_hdd(v, disk_file)
+def attach_scsi_hdd(v, disk_file, port: 2, device: 0)
 
   puts "Start attach_scsi_hdd ..."
   puts "HDD : disk_file = #{disk_file}"
@@ -54,8 +64,8 @@ def attach_scsi_hdd(v, disk_file)
       v.customize [
         'storageattach',    :id,
         '--storagectl',     'SCSI',
-        '--port',           2,
-        '--device',         0,
+        '--port',           port,
+        '--device',         device,
         '--type',           'hdd',
         '--medium',         disk_file,
       ]
@@ -63,10 +73,34 @@ def attach_scsi_hdd(v, disk_file)
 
 end
 
-def provision_newhdd_scsi(vm)
+
+##################################################################
+##
+##    ディスクをデタッチする
+##
+
+def detach_disk(machine, port: 2, device: 0)
+
+  command = "VBoxManage storageattach #{machine}" +
+            " --storagectl SCSI" +
+            " --port #{port} --device #{device}" +
+            " --type hdd --medium none"
+  p command
+  `#{command}`
+
+end
+
+
+##################################################################
+##
+##    新しいディスクに対するプロビジョニング
+##
+
+def provision_newhdd_scsi(vm, dev: '/dev/sdc')
 
   vm.provision("newhdd", type: "shell",
                 path: "#{__dir__}/provision/newhdd-scsi.sh",
+                args: [ dev ],
                 privileged: true)
 
 end
@@ -77,22 +111,23 @@ end
 ##    仮想マシンを停止した時に、デタッチしておく
 ##
 
-def config_detach_trigger(config)
+def config_detach_trigger(config, port: 2, device: 0)
 
   machine_id = MachineInfo.get_machine_id()
 
   config.trigger.after :halt do |trigger|
     trigger.ruby do |env, machine|
       puts "Detach disk from #{machine.id} after halt ..."
-      detach_disk(machine.id)
+      detach_disk(machine.id, port: port, device: device)
     end
     trigger.info = 'Detach disk after halt'
   end
 
   config.trigger.before :destroy do |trigger|
     trigger.ruby do |env, machine|
-      puts "Check disk attach in machine #{machine.id} ..."
-      hdd_attached = check_disk_attached(machine_id, port: 'SCSI-2-0')
+      port_key="SCSI-#{port}-#{device}"
+      puts "Check disk attach in machine #{machine.id} in #{port_key}"
+      hdd_attached = check_disk_attached(machine_id, port: port_key)
 
       if hdd_attached != 'none' then
         raise Vagrant::Errors::VagrantError.new, \
