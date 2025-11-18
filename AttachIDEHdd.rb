@@ -21,6 +21,24 @@ def check_disk_attached(machine, port: 'IDE-1-0')
 end
 
 
+##################################################################
+##
+##    ストレージコントローラを追加する
+##
+
+def add_ide_storage_controller(vb)
+
+  vb.customize [
+    'storagectl',       :id,
+    '--name',           'IDE',
+    '--add',            'ide',
+    '--controller',     'PIIX4',
+    '--portcount',      '2',
+    '--bootable',       'on'
+  ]
+
+end
+
 
 ##################################################################
 ##
@@ -62,12 +80,14 @@ end
 ##
 
 def detach_disk(machine, port: 1, device: 0)
+
   command = "VBoxManage storageattach #{machine}" +
             " --storagectl IDE" +
             " --port #{port} --device #{device}" +
             " --type hdd --medium none"
   p command
   `#{command}`
+
 end
 
 
